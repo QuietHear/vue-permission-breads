@@ -4,7 +4,7 @@
 */
 /*
 * @LastEditors: aFei
-* @LastEditTime: 2019-04-29 17:12:53
+* @LastEditTime: 2019-04-29 17:15:44
 */
 <template>
   <div class="permission-breads" :class=cname :style=myStyle>
@@ -79,7 +79,7 @@
         this.$router.go(-1);
       },
       change(to) { // 根据当前路由改变数据
-        this.showBack = to.meta.hideBackBtn !== true ? false : true; // 判断是否隐藏返回按钮
+        this.showBack = to.meta.hideBackBtn === true ? false : true; // 判断是否隐藏返回按钮
         // console.log('导航change')
         let navMsg = this.$router.options.routes.filter(function (item) {
           return item.name === 'main'; // 根据当前项目最外层name容器修改
