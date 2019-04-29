@@ -16,7 +16,7 @@
 * `title:''`：导航展示的标题内容
 * `show:false`：是否展示在导航栏，只有false才不展示
 * `markName:''`：代替当前路由点亮的导航的name，show:false时才生效
-* `hideBackBtn:''`：隐藏后退按钮，只有false才隐藏
+* `hideBackBtn:''`：隐藏后退按钮，只有true才隐藏
 * `parents:['a']`：当前页面show：false，且它的前一个页面也是show:false的，以此类推，
 从展示的页面开始，按照层级依次push对应的出自己外的隐藏页面的name
 * `replaceIndex: true`：当前页面是否在面包屑上与容器的名字合并，只有true才合并不显示自己的name
