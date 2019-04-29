@@ -4,7 +4,7 @@
 */
 /*
 * @LastEditors: aFei
-* @LastEditTime: 2019-04-29 16:35:44
+* @LastEditTime: 2019-04-29 16:57:21
 */
 <template>
   <div class="permission-breads" :class=cname :style=myStyle>
@@ -69,7 +69,10 @@
       }
     },
     created() {
-      this.change(this.$route);
+      console.log()
+      if (this.$route.name !== 'main') {
+        this.change(this.$route);
+      }
     },
     methods: {
       goBack() {
