@@ -4,6 +4,22 @@
 */
 /*
 * @LastEditors: aFei
-* @LastEditTime: 2019-04-29 09:54:15
+* @LastEditTime: 2019-04-29 11:23:59
 */
+.permission-breads {
+  box-sizing: border-box;
+}
+.permission-breads > span:last-child {
+  margin-right: 0;
+}
+.permission-breads a {
+  text-decoration: none;
+}
+.permission-breads button {
+  position: absolute;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
 /*# sourceMappingURL=vuePermissionBreads.css.map */

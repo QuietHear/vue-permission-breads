@@ -4,6 +4,29 @@
 */
 /*
 * @LastEditors: aFei
-* @LastEditTime: 2019-04-29 09:54:32
+* @LastEditTime: 2019-04-29 11:24:44
 */
+.breads-extra {
+  height: 33px;
+  background: #ffffff;
+  position: relative;
+  width: 100%;
+  line-height: 33px;
+  color: #8998a6;
+  font-size: 14px;
+  padding-left: 1%;
+}
+.breads-extra > span {
+  margin-right: 6px;
+}
+.breads-extra a {
+  color: #f49900;
+}
+.breads-extra button {
+  top: 6px;
+  right: 1vw;
+  padding: 0;
+  font-size: 14px;
+  height: 20px;
+}
 /*# sourceMappingURL=cname.css.map */

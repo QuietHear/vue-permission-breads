@@ -4,5 +4,33 @@
 */
 /*
 * @LastEditors: aFei
-* @LastEditTime: 2019-04-29 09:54:32
+* @LastEditTime: 2019-04-29 11:24:44
 */
+@navigate_height: 33px; // 面包屑高度
+@primary_color: #f49900; // 激活颜色
+.breads-extra {
+  height: @navigate_height;
+  background: #ffffff;
+  position: relative;
+  width: 100%;
+  line-height: @navigate_height;
+  color: #8998a6;
+  font-size: 14px;
+  padding-left: 1%;
+
+  > span {
+    margin-right: 6px;
+  }
+
+  a {
+    color: @primary_color;
+  }
+
+  button {
+    top: 6px;
+    right: 1vw;
+    padding: 0;
+    font-size: 14px;
+    height: 20px;
+  }
+}
