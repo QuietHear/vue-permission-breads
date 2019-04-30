@@ -4,7 +4,7 @@
 */
 /*
 * @LastEditors: aFei
-* @LastEditTime: 2019-04-29 17:15:44
+* @LastEditTime: 2019-04-30 09:05:28
 */
 <template>
   <div class="permission-breads" :class=cname :style=myStyle>
@@ -69,7 +69,6 @@
       }
     },
     created() {
-      console.log()
       if (this.$route.name !== 'main') {
         this.change(this.$route);
       }
@@ -81,23 +80,23 @@
       change(to) { // 根据当前路由改变数据
         this.showBack = to.meta.hideBackBtn === true ? false : true; // 判断是否隐藏返回按钮
         // console.log('导航change')
-        let navMsg = this.$router.options.routes.filter(function (item) {
+        let navMsg = this.$router.options.routes.filter(item => {
           return item.name === 'main'; // 根据当前项目最外层name容器修改
         })[0].children;
         if (to.meta.changeMark !== undefined && to.meta.changeMark !== '') { // 改变指定页面的markName
           if (to.meta.changeMark.toString() === to.meta.changeMark) { // 字符串
             let parent;
             let child;
-            parent = navMsg.filter(function (item) {
+            parent = navMsg.filter(item => {
               return item.name === to.meta.changeMark;
             });
             if (parent.length > 0) {
               parent[0].meta.markName = to.name;
             } else {
-              parent = navMsg.filter(function (item) {
+              parent = navMsg.filter(item => {
                 let isTrue = false;
                 if (item.children !== undefined && item.children.length > 0) {
-                  let arr = item.children.filter(function (one) {
+                  let arr = item.children.filter(one => {
                     return one.name === to.meta.changeMark;
                   });
                   if (arr.length > 0) {
@@ -106,7 +105,7 @@
                 }
                 return isTrue;
               });
-              child = parent[0].children.filter(function (item) {
+              child = parent[0].children.filter(item => {
                 return item.name === to.meta.changeMark;
               });
               child[0].meta.markName = to.name;
@@ -115,16 +114,16 @@
             for (let i = 0; i < to.meta.changeMark.length; i++) {
               let parent;
               let child;
-              parent = navMsg.filter(function (item) {
+              parent = navMsg.filter(item => {
                 return item.name === to.meta.changeMark[i];
               });
               if (parent.length > 0) {
                 parent[0].meta.markName = to.name;
               } else {
-                parent = navMsg.filter(function (item) {
+                parent = navMsg.filter(item => {
                   let isTrue = false;
                   if (item.children !== undefined && item.children.length > 0) {
-                    let arr = item.children.filter(function (one) {
+                    let arr = item.children.filter(one => {
                       return one.name === to.meta.changeMark[i];
                     });
                     if (arr.length > 0) {
@@ -133,7 +132,7 @@
                   }
                   return isTrue;
                 });
-                child = parent[0].children.filter(function (item) {
+                child = parent[0].children.filter(item => {
                   return item.name === to.meta.changeMark[i];
                 });
                 child[0].meta.markName = to.name;
@@ -148,25 +147,25 @@
             let arr = [];
             let parent;
             let child;
-            parent = navMsg.filter(function (item) {
+            parent = navMsg.filter(item => {
               return item.name === to.meta.markName;
             });
             if (parent.length > 0) {
               arr = [{name: parent[0].meta.title, linkName: parent[0].name}];
             } else {
-              parent = navMsg.filter(function (item) {
+              parent = navMsg.filter(item => {
                 let isTrue = false;
                 if (item.children !== undefined && item.children.length > 0) {
-                  let arr = item.children.filter(function (one) {
+                  let arr = item.children.filter(one => {
                     return one.name === to.meta.markName;
                   });
                   if (arr.length > 0) {
                     isTrue = true;
                   }
                 }
-                return isTrue
+                return isTrue;
               });
-              child = parent[0].children.filter(function (item) {
+              child = parent[0].children.filter(item => {
                 return item.name === to.meta.markName;
               });
               arr = [{name: parent[0].meta.title, linkName: parent[0].name}, {
@@ -175,7 +174,7 @@
               }];
             }
             for (let i = 0; i < to.meta.parents.length; i++) {
-              parent[0].children.filter(function (item) {
+              parent[0].children.filter(item => {
                 if (item.name === to.meta.parents[i]) {
                   arr.push({name: item.meta.title, linkName: item.name});
                 }
@@ -188,16 +187,16 @@
             // console.log('前一个页面不是隐藏的')
             let parent;
             let child;
-            parent = navMsg.filter(function (item) {
+            parent = navMsg.filter(item => {
               return item.name === to.meta.markName;
             });
             if (parent.length > 0) {
               this.navigate = [{name: parent[0].meta.title, linkName: parent[0].name}];
             } else {
-              parent = navMsg.filter(function (item) {
+              parent = navMsg.filter(item => {
                 let isTrue = false;
                 if (item.children !== undefined && item.children.length > 0) {
-                  let arr = item.children.filter(function (one) {
+                  let arr = item.children.filter(one => {
                     return one.name === to.meta.markName;
                   });
                   if (arr.length > 0) {
@@ -206,7 +205,7 @@
                 }
                 return isTrue;
               });
-              child = parent[0].children.filter(function (item) {
+              child = parent[0].children.filter(item => {
                 return item.name === to.meta.markName;
               });
               this.navigate = [{name: parent[0].meta.title, linkName: parent[0].name}, {
@@ -222,16 +221,16 @@
           // console.log('我是显示的')
           let parent;
           let child;
-          parent = navMsg.filter(function (item) {
+          parent = navMsg.filter(item => {
             return item.name === to.name;
           });
           if (parent.length > 0) {
             this.navigate = [{name: parent[0].meta.title, linkName: parent[0].name}];
           } else {
-            parent = navMsg.filter(function (item) {
+            parent = navMsg.filter(item => {
               let isTrue = false;
               if (item.children.length > 0) {
-                let arr = item.children.filter(function (one) {
+                let arr = item.children.filter(one => {
                   return one.name === to.name;
                 });
                 if (arr.length > 0) {
@@ -240,7 +239,7 @@
               }
               return isTrue;
             });
-            child = parent[0].children.filter(function (item) {
+            child = parent[0].children.filter(item => {
               return item.name === to.name;
             });
             this.navigate = [{name: parent[0].meta.title, linkName: parent[0].name}, {

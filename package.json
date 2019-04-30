@@ -1,7 +1,7 @@
 {
   "name": "vue-permission-breads",
   "description": "基于权限、国际化的vue 面包屑组件",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "author": "aFei <1106728884@qq.com>",
   "license": "MIT",
   "main": "dist/vue-permission-breads.min.js",
