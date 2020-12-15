@@ -24,12 +24,12 @@
 
 ## 2. 参数
 * `cname`：自定义class-->String;非必传;默认*'ele-nav'*
-* `myStyle`：自定义内联样式-->String;非必传;默认*''*
-* `backIcon`：返回图标的iconfont（class格式）-->String;非必传;默认*''*
-* `backIconPosition`：返回图标的位置-->String;非必传;可选'left、'right';'默认*'left'*
+* `my-style`：自定义内联样式-->String;非必传;默认*''*
+* `back-icon`：返回图标的iconfont（class格式）-->String;非必传;默认*''*
+* `back-icon-position`：返回图标的位置-->String;非必传;可选'left、'right';'默认*'left'*
 * `i18n`：标题开启国际化-->Boolean;非必传;默认*false*
-* `i18nMyPosition`：我的位置i18n名字-->String;非必传;默认*''*
-* `i18nBtn`：按钮i18n名字-->String;非必传;默认*''*
+* `i18n-my-position`：我的位置i18n名字-->String;非必传;默认*''*
+* `i18n-btn`：按钮i18n名字-->String;非必传;默认*''*
 
 ## 3. 自定义class（demo）
 	@navigate_height: 33px; // 面包屑高度
