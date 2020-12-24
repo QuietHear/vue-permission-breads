@@ -3,27 +3,40 @@
 * @Date: 2019-04-29 09:54:13
 */
 /*
-* @LastEditors: aFei
-* @LastEditTime: 2019-04-29 11:23:59
+ * @LastEditors: afei
+ * @LastEditTime: 2020-12-24 14:28:17
 */
-.permission-breads {
+.vue-permission-breads {
   box-sizing: border-box;
-
-  > span {
-    &:last-child {
-      margin-right: 0;
+  position: relative;
+  padding: 0 1vw;
+  ul{
+    display: inline-flex;
+    li{
+      margin-right: 6px;
+      span{
+        display: inline-block;
+        margin-left: 3px;
+      }
+      &:last-child{
+        margin-right: 0;
+      }
+      &.active{
+        cursor: pointer;
+      }
     }
   }
-
-  a {
-    text-decoration: none;
-  }
-
-  button {
+  .back{
     position: absolute;
-    background: none;
-    border: none;
-    outline: none;
-    cursor: pointer;
+    top: 0;
+    right: 1vw;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    p{
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+    }
   }
 }

@@ -1,4 +1,4 @@
-# 基于权限、国际化的vue 面包屑组件
+# 基于国际化的vue面包屑组件
 
 ## 安装
 	npm i vue-permission-breads
@@ -6,54 +6,66 @@
 ## 0. 组件说明
 ##### ①. 依赖组件
 * vue-router
-* 路由按照下方规范修改
 
 ##### ②. 支持扩展
 * i18n
 * iconfont(class形式)
 
-## 1. 修改之前路由的meta属性(路由文件只能添加一层，其余全靠meta控制，必须遵循)
-* `title:''`：导航展示的标题内容
-* `show:false`：是否展示在导航栏，只有false才不展示
-* `markName:''`：代替当前路由点亮的导航的name，show:false时才生效
+## 1. 修改之前路由的meta属性(展示属性全靠meta控制)
+* `title:''`：面包屑的标题内容
 * `hideBackBtn:''`：隐藏后退按钮，只有true才隐藏
-* `parents:['a']`：当前页面show：false，且它的前一个页面也是show:false的，以此类推，
+* `parents:['a']`：平级路由变为父子级，从第一个未改变的路由name按顺序添加，例如详情页需要添加一个列表页（列表页是正常路由结构）即可
 从展示的页面开始，按照层级依次push对应的出自己外的隐藏页面的name
-* `replaceIndex: true`：当前页面是否在面包屑上与容器的名字合并，只有true才合并不显示自己的name
-* `changeMark:''/['a']`：写在每个调用公共页面的路由上，替换指定路由的markName，可以使用字符串，也可以使用数组，适用于多个页面同时使用同一个公共隐藏页面
+* `replaceIndex: true`：面包屑上隐藏自己，只有true才会隐藏，建议顺便隐藏返回按钮
 
 ## 2. 参数
-* `cname`：自定义class-->String;非必传;默认*'ele-nav'*
-* `my-style`：自定义内联样式-->String;非必传;默认*''*
-* `back-icon`：返回图标的iconfont（class格式）-->String;非必传;默认*''*
-* `back-icon-position`：返回图标的位置-->String;非必传;可选'left、'right';'默认*'left'*
+* `root-name`：从根目录开始，到业务菜单的name集合-->Array;非必传;默认*["main"]*,取根目录下main的所有菜单
 * `i18n`：标题开启国际化-->Boolean;非必传;默认*false*
-* `i18n-my-position`：我的位置i18n名字-->String;非必传;默认*''*
-* `i18n-btn`：按钮i18n名字-->String;非必传;默认*''*
+* `cname`：自定义class-->String;非必传;默认*'extra'*
+* `my-position`：替换我的位置，可使用i18n-->String;非必传;默认*'我的位置'*
+* `back-name`：替换返回，可使用i18n-->String;非必传;默认*'返回'*
+* `iconfont`：图标开启iconfont格式-->Boolean;非必传;默认*false*
+>
+	// 未开启
+	icon:"tuihuobaozhang" -->icon:"tuihuobaozhang"
+	// 开启后的变化
+	icon:"tuihuobaozhang" -->icon:"iconfont icon-tuihuobaozhang"
+>
+
+* `back-icon`：返回图标的class-->String;非必传;默认*''*
+* `back-icon-position`：返回图标相对返回的位置-->String;非必传;'默认*'left'*
+>
+	left / right
+>
 
 ## 3. 自定义class（demo）
-	@navigate_height: 33px; // 面包屑高度
+>
 	@primary_color: #f49900; // 激活颜色
-	.breads-extra {
-	  height: @navigate_height;
-	  background: #ffffff;
-	  position: relative;
-	  width: 100%;
-	  line-height: @navigate_height;
-	  color: #8998a6;
-	  font-size: 14px;
-	  padding-left: 1%;
-	  > span {
-	    margin-right: 6px;
+	@breads_height: 33px; // 面包屑高度
+	@breads_background:#fff; // 面包屑背景色
+	@breads_position_color:#000; // 我的位置颜色
+	@breads_normal_color:#8998a6; // 面包屑颜色
+	@breads_back_color:#000; // 返回颜色
+	.vue-permission-breads.extra {
+	  height: @breads_height;
+	  line-height: @breads_height;
+	  background: @breads_background;
+	  color: @breads_position_color;
+	  ul{
+	    li{
+	      color: @breads_normal_color;
+	      &.active{
+	        color: @primary_color;
+	      }
+	    }
 	  }
-	  a {
-	    color: @primary_color;
-	  }
-	  button {
-	    top: 6px;
-	    right: 1vw;
-	    padding: 0;
-	    font-size: 14px;
-	    height: 20px;
+	  .back{
+	    p{
+	      color: @breads_back_color;
+	      i{
+	        font-size: 15px;
+	      }
+	    }
 	  }
 	}
+>

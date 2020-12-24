@@ -3,30 +3,24 @@
 * @Date: 2019-04-29 09:54:30
 */
 /*
-* @LastEditors: aFei
-* @LastEditTime: 2019-04-29 11:24:44
+ * @LastEditors: afei
+ * @LastEditTime: 2020-12-24 14:30:13
 */
-.breads-extra {
+.vue-permission-breads.extra {
   height: 33px;
-  background: #ffffff;
-  position: relative;
-  width: 100%;
   line-height: 33px;
+  background: #fff;
+  color: #000;
+}
+.vue-permission-breads.extra ul li {
   color: #8998a6;
-  font-size: 14px;
-  padding-left: 1%;
 }
-.breads-extra > span {
-  margin-right: 6px;
-}
-.breads-extra a {
+.vue-permission-breads.extra ul li.active {
   color: #f49900;
 }
-.breads-extra button {
-  top: 6px;
-  right: 1vw;
-  padding: 0;
-  font-size: 14px;
-  height: 20px;
+.vue-permission-breads.extra .back p {
+  color: #000;
 }
-/*# sourceMappingURL=cname.css.map */
+.vue-permission-breads.extra .back p i {
+  font-size: 15px;
+}

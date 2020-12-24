@@ -3,23 +3,40 @@
 * @Date: 2019-04-29 09:54:13
 */
 /*
-* @LastEditors: aFei
-* @LastEditTime: 2019-04-29 11:23:59
+ * @LastEditors: afei
+ * @LastEditTime: 2020-12-24 14:28:17
 */
-.permission-breads {
+.vue-permission-breads {
   box-sizing: border-box;
+  position: relative;
+  padding: 0 1vw;
 }
-.permission-breads > span:last-child {
+.vue-permission-breads ul {
+  display: inline-flex;
+}
+.vue-permission-breads ul li {
+  margin-right: 6px;
+}
+.vue-permission-breads ul li span {
+  display: inline-block;
+  margin-left: 3px;
+}
+.vue-permission-breads ul li:last-child {
   margin-right: 0;
 }
-.permission-breads a {
-  text-decoration: none;
-}
-.permission-breads button {
-  position: absolute;
-  background: none;
-  border: none;
-  outline: none;
+.vue-permission-breads ul li.active {
   cursor: pointer;
 }
-/*# sourceMappingURL=vuePermissionBreads.css.map */
+.vue-permission-breads .back {
+  position: absolute;
+  top: 0;
+  right: 1vw;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.vue-permission-breads .back p {
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}

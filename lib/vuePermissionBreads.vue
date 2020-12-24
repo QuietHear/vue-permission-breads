@@ -3,269 +3,234 @@
 * @Date: 2019-04-29 09:56:41
 */
 /*
-* @LastEditors: aFei
-* @LastEditTime: 2019-04-30 09:05:28
+ * @LastEditors: afei
+ * @LastEditTime: 2020-12-24 14:38:11
 */
 <template>
-  <div class="permission-breads" :class=cname :style=myStyle>
-    {{i18n===true?$t(i18nMyPosition):'我的位置'}}：
-    <span :key="index"
-          v-for="(item,index) in navigate"
-          v-if="index<navigate.length-1">
-              <router-link
-                :to="{name:item.linkName}">{{i18n===true?$t(item.name):item.name}}&nbsp;&nbsp;&gt;</router-link>
-            </span>
-    <span v-else>{{i18n===true?$t(item.name):item.name}}</span>
-    <button @click="goBack"
-            v-if="showBack && backIconPosition==='left'">
-      <i class="icon iconfont" :class="backIcon"></i>
-      {{i18n===true?$t(i18nBtn):'返回'}}
-    </button>
-    <button @click="goBack"
-            v-if="showBack && backIconPosition==='right'">
-      {{i18n===true?$t(i18nBtn):'返回'}}
-      <i class="icon iconfont" :class="backIcon"></i>
-    </button>
+  <div :class="['vue-permission-breads',cname]">
+    {{ i18n ? $t(myPosition) : myPosition }}：
+    <ul>
+      <li
+        :class="[index !== navigate.length - 1 ? 'active' : '']"
+        @click="goOne(item, index)"
+        v-for="(item, index) in navigate"
+        :key="index"
+      >
+        {{ i18n ? $t(item.name) : item.name }}
+        <span v-if="index !== navigate.length - 1">&gt;</span>
+      </li>
+    </ul>
+    <div class="back" v-if="!hideBackBtn">
+      <p @click="goBack">
+        <i
+          :class="[iconfont ? 'iconfont icon-' + backIcon : backIcon]"
+          v-if="backIconPosition === 'left' && backIcon"
+        ></i>
+        {{ i18n ? $t(backName) : backName }}
+        <i
+          :class="[iconfont ? 'iconfont icon-' + backIcon : backIcon]"
+          v-if="backIconPosition === 'right' && backIcon"
+        ></i>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'vuePermissionBreads',
-    data() {
-      return {
-        showBack: true,
-        navigate: []
-      }
+export default {
+  name: "vuePermissionBreads",
+  data() {
+    return {
+      hideBackBtn: false,
+      navigate: [],
+      routerTmp: [],
+    };
+  },
+  props: {
+    rootName: {
+      // 根目录开始路径
+      type: Array,
+      default: () => {
+        return ["main"];
+      },
     },
-    props: {
-      cname: { // 自定义class
-        type: String,
-        default: 'breads-extra'
-      },
-      myStyle: { // 自定义内联样式
-        type: String,
-        default: ''
-      },
-      backIcon: { // 返回图标的iconfont（class格式）
-        type: String,
-        default: ''
-      },
-      backIconPosition: { // 返回图标的位置
-        type: String,
-        default: 'left'
-      },
-      i18n: { // 开启国际化
-        type: Boolean,
-        default: false
-      },
-      i18nMyPosition: { // 我的位置i18n名字
-        type: String,
-        default: ''
-      },
-      i18nBtn: { // 按钮i18n名字
-        type: String,
-        default: ''
-      }
+    i18n: {
+      // 开启国际化
+      type: Boolean,
+      default: false,
     },
-    created() {
-      if (this.$route.name !== 'main') {
-        this.change(this.$route);
-      }
+    cname: {
+      // 自定义class
+      type: String,
+      default: "extra",
     },
-    methods: {
-      goBack() {
-        this.$router.go(-1);
-      },
-      change(to) { // 根据当前路由改变数据
-        this.showBack = to.meta.hideBackBtn === true ? false : true; // 判断是否隐藏返回按钮
-        // console.log('导航change')
-        let navMsg = this.$router.options.routes.filter(item => {
-          return item.name === 'main'; // 根据当前项目最外层name容器修改
+    myPosition: {
+      // 替换我的位置
+      type: String,
+      default: "我的位置",
+    },
+    backName: {
+      // 替换返回
+      type: String,
+      default: "返回",
+    },
+    iconfont: {
+      // 图标开启iconfont格式
+      type: Boolean,
+      default: false,
+    },
+    backIcon: {
+      // 返回图标的class
+      type: String,
+      default: "",
+    },
+    backIconPosition: {
+      // 返回图标的位置
+      type: String,
+      default: "left",
+    },
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    // 初始化路由菜单
+    init() {
+      let routeMsg = JSON.parse(JSON.stringify(this.$router.options.routes));
+      // 根目录查找
+      this.rootName.forEach((item) => {
+        routeMsg = routeMsg.filter((one) => {
+          return one.name === item;
         })[0].children;
-        if (to.meta.changeMark !== undefined && to.meta.changeMark !== '') { // 改变指定页面的markName
-          if (to.meta.changeMark.toString() === to.meta.changeMark) { // 字符串
-            let parent;
-            let child;
-            parent = navMsg.filter(item => {
-              return item.name === to.meta.changeMark;
+      });
+      // 移除parents并格式化结构
+      this.removeParents(routeMsg);
+      // 格式化数据
+      this.sortData(routeMsg);
+      this.routerTmp = [...routeMsg];
+      this.changeRouter();
+    },
+    // 移除parents
+    removeParents(list) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].meta.parents) {
+          if (list[i].meta.parents.length > 0) {
+            let lin = list.filter((one) => {
+              return one.name === list[i].meta.parents[0];
             });
-            if (parent.length > 0) {
-              parent[0].meta.markName = to.name;
-            } else {
-              parent = navMsg.filter(item => {
-                let isTrue = false;
-                if (item.children !== undefined && item.children.length > 0) {
-                  let arr = item.children.filter(one => {
-                    return one.name === to.meta.changeMark;
-                  });
-                  if (arr.length > 0) {
-                    isTrue = true;
-                  }
-                }
-                return isTrue;
-              });
-              child = parent[0].children.filter(item => {
-                return item.name === to.meta.changeMark;
-              });
-              child[0].meta.markName = to.name;
-            }
-          } else { // 数组
-            for (let i = 0; i < to.meta.changeMark.length; i++) {
-              let parent;
-              let child;
-              parent = navMsg.filter(item => {
-                return item.name === to.meta.changeMark[i];
-              });
-              if (parent.length > 0) {
-                parent[0].meta.markName = to.name;
-              } else {
-                parent = navMsg.filter(item => {
-                  let isTrue = false;
-                  if (item.children !== undefined && item.children.length > 0) {
-                    let arr = item.children.filter(one => {
-                      return one.name === to.meta.changeMark[i];
-                    });
-                    if (arr.length > 0) {
-                      isTrue = true;
-                    }
-                  }
-                  return isTrue;
-                });
-                child = parent[0].children.filter(item => {
-                  return item.name === to.meta.changeMark[i];
-                });
-                child[0].meta.markName = to.name;
+            if (lin.length > 0) {
+              if (!lin[0].children) {
+                lin[0].children = [];
               }
+              if (
+                lin[0].children.filter((one) => {
+                  return one.name === list[i].meta.parents[0];
+                }).length === 0
+              ) {
+                lin[0].children.push(list[i]);
+              }
+              list[i].meta.parents.splice(0, 1);
+              list.splice(i, 1);
+              i -= 1;
             }
           }
         }
-        if (to.meta.markName !== undefined && to.meta.markName !== '') { // 当前路由在nav上是隐藏的页面
-          // console.log('我是隐藏的')
-          if (to.meta.parents !== undefined && to.meta.parents !== '') { // 前一个页面是隐藏页面
-            // console.log('前一个页面是隐藏的')
-            let arr = [];
-            let parent;
-            let child;
-            parent = navMsg.filter(item => {
-              return item.name === to.meta.markName;
-            });
-            if (parent.length > 0) {
-              arr = [{name: parent[0].meta.title, linkName: parent[0].name}];
-            } else {
-              parent = navMsg.filter(item => {
-                let isTrue = false;
-                if (item.children !== undefined && item.children.length > 0) {
-                  let arr = item.children.filter(one => {
-                    return one.name === to.meta.markName;
-                  });
-                  if (arr.length > 0) {
-                    isTrue = true;
-                  }
-                }
-                return isTrue;
-              });
-              child = parent[0].children.filter(item => {
-                return item.name === to.meta.markName;
-              });
-              arr = [{name: parent[0].meta.title, linkName: parent[0].name}, {
-                name: child[0].meta.title,
-                linkName: child[0].name
-              }];
-            }
-            for (let i = 0; i < to.meta.parents.length; i++) {
-              parent[0].children.filter(item => {
-                if (item.name === to.meta.parents[i]) {
-                  arr.push({name: item.meta.title, linkName: item.name});
-                }
-                return false;
-              });
-            }
-            arr.push({name: to.meta.title, linkName: to.name});
-            this.navigate = [...arr];
-          } else {
-            // console.log('前一个页面不是隐藏的')
-            let parent;
-            let child;
-            parent = navMsg.filter(item => {
-              return item.name === to.meta.markName;
-            });
-            if (parent.length > 0) {
-              this.navigate = [{name: parent[0].meta.title, linkName: parent[0].name}];
-            } else {
-              parent = navMsg.filter(item => {
-                let isTrue = false;
-                if (item.children !== undefined && item.children.length > 0) {
-                  let arr = item.children.filter(one => {
-                    return one.name === to.meta.markName;
-                  });
-                  if (arr.length > 0) {
-                    isTrue = true;
-                  }
-                }
-                return isTrue;
-              });
-              child = parent[0].children.filter(item => {
-                return item.name === to.meta.markName;
-              });
-              this.navigate = [{name: parent[0].meta.title, linkName: parent[0].name}, {
-                name: child[0].meta.title,
-                linkName: child[0].name
-              }];
-            }
-            if (to.meta.replaceIndex !== true) {
-              this.navigate.push({name: to.meta.title, linkName: to.name});
-            }
-          }
-        } else { // 当前路由在nav上是显示的页面
-          // console.log('我是显示的')
-          let parent;
-          let child;
-          parent = navMsg.filter(item => {
-            return item.name === to.name;
-          });
-          if (parent.length > 0) {
-            this.navigate = [{name: parent[0].meta.title, linkName: parent[0].name}];
-          } else {
-            parent = navMsg.filter(item => {
-              let isTrue = false;
-              if (item.children.length > 0) {
-                let arr = item.children.filter(one => {
-                  return one.name === to.name;
-                });
-                if (arr.length > 0) {
-                  isTrue = true;
-                }
-              }
-              return isTrue;
-            });
-            child = parent[0].children.filter(item => {
-              return item.name === to.name;
-            });
-            this.navigate = [{name: parent[0].meta.title, linkName: parent[0].name}, {
-              name: child[0].meta.title,
-              linkName: child[0].name
-            }]
-          }
+      }
+      list.forEach((item) => {
+        if (item.children && item.children.length > 0) {
+          this.removeParents(item.children);
+        } else {
+          item.children = [];
+        }
+      });
+    },
+    // 格式化数据
+    sortData(list, parent) {
+      for (let i = 0; i < list.length; i++) {
+        let arr = parent ? [...parent.parentList] : [];
+        if (parent) {
+          arr.push(parent);
+        }
+        let obj = {
+          linkName: list[i].name,
+          path: `/${list[i].path}`,
+          index: `${parent ? parent.index + "-" : ""}${i + 1}`,
+          parentList: arr,
+          name: list[i].meta.title,
+          hideBackBtn: list[i].meta.hideBackBtn === true ? true : false,
+          replaceIndex: list[i].meta.replaceIndex === true ? true : false,
+          children: list[i].children,
+        };
+        list[i] = { ...obj };
+        if (list[i].children.length > 0) {
+          this.sortData(list[i].children, list[i]);
         }
       }
     },
-    watch: {
-      $route(to) {
-        this.change(to);
+    // 路由改变
+    changeRouter() {
+      const router = this.$route;
+      this.findPath(router).then((res) => {
+        const routeMsg = res;
+        this.navigate = [...routeMsg.detail.parentList];
+        if (!routeMsg.detail.replaceIndex) {
+          this.navigate.push(routeMsg.detail);
+        }
+        this.hideBackBtn = routeMsg.detail.hideBackBtn;
+      });
+    },
+    // 返回当前路由路径
+    findPath(route) {
+      return new Promise((resolve) => {
+        this.searchRoute(this.routerTmp, route).then((res) => {
+          let obj = {
+            detail: { ...res },
+            list: [],
+          };
+          obj.list = res.index.split("-");
+          resolve(obj);
+        });
+      });
+    },
+    // 找到当前路径
+    searchRoute(list, route) {
+      return new Promise((resolve) => {
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].linkName === route.name) {
+            resolve(list[i]);
+          } else if (list[i].children.length > 0) {
+            this.searchRoute(list[i].children, route).then((res) => {
+              resolve(res);
+            });
+          }
+        }
+      });
+    },
+    // 去指定路由
+    goOne(item, index) {
+      if (index !== this.navigate.length - 1) {
+        this.$router.push({ name: item.linkName });
       }
-    }
-  }
+    },
+    // 返回上一级
+    goBack() {
+      this.$router.go(-1);
+    },
+  },
+  watch: {
+    $route(to) {
+      this.changeRouter();
+    },
+  },
+};
 </script>
 
 <!--基础样式-->
 <style scoped>
-  @import "style/vuePermissionBreads.css";
+@import "style/vuePermissionBreads.css";
 </style>
 
 <!--样式扩展-->
-
-<style scoped>
-  /*默认颜色*/
-  @import "style/cname.css";
+<style>
+@import "style/cname.css";
 </style>
