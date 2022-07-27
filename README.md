@@ -1,4 +1,5 @@
-# 基于国际化的vue面包屑组件
+# 面包屑组件（vue2版）
+[**vue3版本**](https://github.com/QuietHear/vue-ele-nav-plus '浏览') | ***vue2版本***
 
 ## 安装
 	npm i vue-permission-breads
