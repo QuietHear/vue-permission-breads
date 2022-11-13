@@ -1,8 +1,19 @@
 # 面包屑组件（vue2版）
-[**vue3版本**](https://github.com/QuietHear/vue-ele-nav-plus '浏览') | ***vue2版本***
+[**vue3版本**](https://github.com/QuietHear/vue-permission-breads-plus '浏览') | ***vue2版本***
+
 
 ## 安装
 	npm i vue-permission-breads
+	// 需要安装前置依赖组件，已安装请忽略
+	npm i vue-router@3.x
+	// 开启国际化需要安装组件，已安装请忽略
+	npm i vue-i18n
+
+## 使用
+	import vuePermissionBreads from 'vue-permission-breads';
+	
+	Vue.use(vuePermissionBreads);
+
 
 ## 0. 组件说明
 ##### ①. 依赖组件
@@ -12,12 +23,14 @@
 * i18n
 * iconfont(class形式)
 
+
 ## 1. 修改之前路由的meta属性(展示属性全靠meta控制)
 * `title:''`：面包屑的标题内容
 * `hideBackBtn:''`：隐藏后退按钮，只有true才隐藏
 * `parents:['a']`：平级路由变为父子级，从第一个未改变的路由name按顺序添加，例如详情页需要添加一个列表页（列表页是正常路由结构）即可
 从展示的页面开始，按照层级依次push对应的出自己外的隐藏页面的name
 * `replaceIndex: true`：面包屑上隐藏自己，只有true才会隐藏，建议顺便隐藏返回按钮
+
 
 ## 2. 参数
 * `root-name`：从根目录开始，到业务菜单的name集合-->Array;非必传;默认*["main"]*,取根目录下main的所有菜单
@@ -38,6 +51,7 @@
 >
 	left / right
 >
+
 
 ## 3. 自定义class（demo）
 >
